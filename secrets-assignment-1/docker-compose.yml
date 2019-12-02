@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+  drupal:
+    image: drupal:7
+    ports:
+      - "8080:80"
+    volumes:
+      - /var/www/html/modules
+      - /var/www/html/profiles
+      - /var/www/html/themes
+      - /var/www/html/sites
+    restart: always
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_pwd
+      POSTGRES_USER_FILE: /run/secrets/psql_user
+    secrets:
+      - psql_pwd
+      - psql_user
+
+secrets:                        
+  psql_pwd:
+    external: true
+  psql_user:
+    file: ./postgre_username.txt
